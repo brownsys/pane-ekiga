@@ -695,8 +695,8 @@ gm_accounts_window_new (Ekiga::ServiceCore &core)
   gtk_box_pack_start (GTK_BOX (hbox), button_box, FALSE, FALSE, 10);
 
   populate_menu (window); // This will add static and dynamic actions
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), menu_bar, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), event_box, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window))), menu_bar, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window))), event_box, TRUE, TRUE, 0);
 
   /* Generic signals */
   g_signal_connect_swapped (window, "response",
@@ -705,7 +705,7 @@ gm_accounts_window_new (Ekiga::ServiceCore &core)
 
   gm_window_hide_on_delete (window);
 
-  gtk_widget_show_all (GTK_WIDGET (GTK_DIALOG (window)->vbox));
+  gtk_widget_show_all (GTK_WIDGET (gtk_dialog_get_content_area (GTK_DIALOG (window))));
 
 
   /* Engine Signals callbacks */

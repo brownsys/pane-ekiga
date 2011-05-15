@@ -172,8 +172,6 @@ public:
 
     void OnClosedMediaStream (OpalMediaStream & stream);
 
-    void OnRTPStatistics (const OpalConnection & connection, const RTP_Session & session);
-
     void DoSetUp (OpalConnection & connection);
 
 private:

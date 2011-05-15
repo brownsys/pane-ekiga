@@ -237,15 +237,8 @@ void CallManager::set_maximum_jitter (unsigned max_val)
       if (connection) {
 
         OpalMediaStreamPtr stream = connection->GetMediaStream (OpalMediaType::Audio (), false);
-        if (stream != NULL) {
-
-          RTP_Session *session = connection->GetSession (stream->GetSessionID ());
-          if (session != NULL) {
-
-            unsigned units = session->GetJitterTimeUnits ();
-            session->SetJitterBufferSize (20 * units, max_val * units, units);
-          }
-        }
+        if (stream != NULL)
+          stream->EnableJitterBuffer (true);
       }
     }
   }

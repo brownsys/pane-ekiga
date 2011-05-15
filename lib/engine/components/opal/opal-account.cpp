@@ -629,9 +629,8 @@ Opal::Account::setup_presentity ()
   if (presentity) {
 
     presentity->SetPresenceChangeNotifier (PCREATE_PresenceChangeNotifier (OnPresenceChange));
-    presentity->GetAttributes().Set(SIP_Presentity::AuthNameKey, username);
-    presentity->GetAttributes().Set(SIP_Presentity::AuthPasswordKey, password);
-    presentity->GetAttributes().Set(SIP_Presentity::SubProtocolKey, "Agent");
+    presentity->GetAttributes().Set(OpalPresentity::AuthNameKey, username);
+    presentity->GetAttributes().Set(OpalPresentity::AuthPasswordKey, password);
   }
 }
 

@@ -272,11 +272,11 @@ gnome_prefs_scale_new (GtkWidget *table,
 
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE,
 		      1 * 2);
-  
+
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
 
-  adj = (GtkAdjustment *) 
+  adj = (GtkAdjustment *)
     gtk_adjustment_new (gm_conf_get_int (conf_key),
 			min, max, step,
 			2.0, 1.0);
@@ -284,8 +284,6 @@ gnome_prefs_scale_new (GtkWidget *table,
   hscale = gtk_hscale_new (adj);
   gtk_scale_set_draw_value (GTK_SCALE (hscale), FALSE);
   gtk_widget_set_size_request (GTK_WIDGET (hscale), 150, -1);
-  gtk_range_set_update_policy (GTK_RANGE (hscale),
-			       GTK_UPDATE_DELAYED);
   if (!writable)
     gtk_widget_set_sensitive (GTK_WIDGET (hscale), FALSE);
 
@@ -951,7 +949,7 @@ gnome_prefs_window_new (const gchar *logo_name)
   GtkWidget *pixmap = NULL;
   GtkWidget *hsep = NULL;
 
-  GdkColor cwhite;
+  GdkRGBA cwhite;
 
   PangoAttrList *attrs = NULL; 
   PangoAttribute *attr = NULL; 
@@ -981,12 +979,12 @@ gnome_prefs_window_new (const gchar *logo_name)
   gtk_container_add (GTK_CONTAINER (event_box),
 		     GTK_WIDGET (pixmap));
 
-  cwhite.red   = 0xff * 0x100;
-  cwhite.green = 0xff * 0x100;
-  cwhite.blue  = 0xff * 0x100;
-  gdk_colormap_alloc_color(gdk_colormap_get_system (), &cwhite, FALSE, TRUE);
-  gtk_widget_modify_bg (GTK_WIDGET (event_box),
-			GTK_STATE_NORMAL, &cwhite);
+  cwhite.red   = 1.0;
+  cwhite.green = 1.0;
+  cwhite.blue  = 1.0; 
+  cwhite.alpha = 0.0;
+  gtk_widget_override_background_color (GTK_WIDGET (event_box),
+                                        GTK_STATE_FLAG_NORMAL, &cwhite);
 
   gtk_notebook_prepend_page (GTK_NOTEBOOK (gpw->notebook), event_box, NULL);
 

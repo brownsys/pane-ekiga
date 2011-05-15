@@ -49,7 +49,7 @@ GMAudioInputManager_null::~GMAudioInputManager_null ()
 {
 }
 
-void GMAudioInputManager_null::get_devices(std::vector <Ekiga::AudioInputDevice> & devices)
+void GMAudioInputManager_null::get_devices(std::vector <Ekiga::AudioInputDevice> & /*devices*/)
 {
 #if DEBUG
   Ekiga::AudioInputDevice device;

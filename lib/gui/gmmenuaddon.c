@@ -123,8 +123,6 @@ menu_item_selected (GtkWidget *w,
   GtkWidget *statusbar = NULL;
 
   gint id = 0;
-  int len = 0;
-  int i = 0;
 
   statusbar = (GtkWidget *) g_object_get_data (G_OBJECT (w), "statusbar");
 
@@ -291,13 +289,13 @@ gtk_build_menu (GtkWidget *menubar,
       if (menu [i].accel && accel)
 	{
 	  switch (menu [i].accel) {
-		case GDK_F1:
-		case GDK_F11:
-		case GDK_Escape:
-		case GDK_h:
-		case GDK_t:
-		case GDK_m:
-		case GDK_p:
+		case GDK_KEY_F1:
+		case GDK_KEY_F11:
+		case GDK_KEY_Escape:
+		case GDK_KEY_h:
+		case GDK_KEY_t:
+		case GDK_KEY_m:
+		case GDK_KEY_p:
           gtk_widget_add_accelerator (menu [i].widget, "activate",
                                       accel, menu [i].accel,
                                       0, GTK_ACCEL_VISIBLE);

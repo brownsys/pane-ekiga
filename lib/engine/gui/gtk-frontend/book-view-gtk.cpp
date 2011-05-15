@@ -241,8 +241,7 @@ on_updated (gpointer data)
   gtk_statusbar_pop (GTK_STATUSBAR (view->priv->statusbar), 0);
   gtk_statusbar_push (GTK_STATUSBAR (view->priv->statusbar), 0, status.c_str ());
 
-  if (GDK_IS_WINDOW (GTK_WIDGET (view)->window))
-    gdk_window_set_cursor (GTK_WIDGET (view)->window, NULL);
+  gdk_window_set_cursor (GDK_WINDOW (gtk_widget_get_parent_window (GTK_WIDGET (view))), NULL);
 
   boost::shared_ptr<Ekiga::Filterable> filtered = boost::dynamic_pointer_cast<Ekiga::Filterable>(view->priv->book);
   if (filtered) {
@@ -281,7 +280,7 @@ on_entry_activated_cb (GtkWidget *entry,
   const char *entry_text = gtk_entry_get_text (GTK_ENTRY (entry));
 
   cursor = gdk_cursor_new (GDK_WATCH);
-  gdk_window_set_cursor (GTK_WIDGET (data)->window, cursor);
+  gdk_window_set_cursor (GDK_WINDOW (gtk_widget_get_parent_window (GTK_WIDGET (data))), cursor);
   gdk_cursor_unref (cursor);
 
   boost::shared_ptr<Ekiga::Filterable> filtered = boost::dynamic_pointer_cast<Ekiga::Filterable>(BOOK_VIEW_GTK (data)->priv->book);
@@ -400,8 +399,7 @@ book_view_gtk_update_contact (BookViewGtk *self,
 		      -1);
   g_object_unref (icon);
 
-  if (GDK_IS_WINDOW (GTK_WIDGET (self)->window))
-    gdk_window_set_cursor (GTK_WIDGET (self)->window, NULL);
+  gdk_window_set_cursor (GDK_WINDOW (gtk_widget_get_parent_window (GTK_WIDGET (self))), NULL);
 }
 
 
@@ -419,8 +417,7 @@ book_view_gtk_remove_contact (BookViewGtk *self,
   while (book_view_gtk_find_iter_for_contact (self, contact, &iter))
     gtk_list_store_remove (store, &iter);
 
-  if (GDK_IS_WINDOW (GTK_WIDGET (self)->window))
-    gdk_window_set_cursor (GTK_WIDGET (self)->window, NULL);
+  gdk_window_set_cursor (GDK_WINDOW (gtk_widget_get_parent_window (GTK_WIDGET (self))), NULL);
 }
 
 

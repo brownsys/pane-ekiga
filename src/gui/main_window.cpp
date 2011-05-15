@@ -54,7 +54,6 @@
 #include "gmconf.h"
 #include <boost/smart_ptr.hpp>
 #include "gmmenuaddon.h"
-#include "gmlevelmeter.h"
 #include "gmpowermeter.h"
 #include "trigger.h"
 #include "menu-builder-tools.h"
@@ -185,8 +184,6 @@ struct _EkigaMainWindowPrivate
   GtkWidget *audio_settings_window;
   GtkWidget *audio_input_volume_frame;
   GtkWidget *audio_output_volume_frame;
-  GtkWidget *input_signal;
-  GtkWidget *output_signal;
 #if GTK_CHECK_VERSION (3, 0, 0)
   GtkAdjustment *adj_input_volume;
   GtkAdjustment *adj_output_volume;
@@ -194,7 +191,6 @@ struct _EkigaMainWindowPrivate
   GtkObject *adj_input_volume;
   GtkObject *adj_output_volume;
 #endif
-  unsigned int levelmeter_timeout_id;
 
   /* Video Settings Window */
   GtkWidget *video_settings_window;
@@ -322,8 +318,6 @@ static void ekiga_main_window_set_stay_on_top (EkigaMainWindow *mw,
 static void ekiga_main_window_show_call_panel (EkigaMainWindow *mw);
 
 static void ekiga_main_window_hide_call_panel (EkigaMainWindow *mw);
-
-void ekiga_main_window_clear_signal_levels (EkigaMainWindow *mw);
 
 static void ekiga_main_window_incoming_call_dialog_show (EkigaMainWindow *mw,
                                                       boost::shared_ptr<Ekiga::Call>  call);
@@ -1025,18 +1019,6 @@ static gboolean on_stats_refresh_cb (gpointer self)
   return true;
 }
 
-static gboolean on_signal_level_refresh_cb (gpointer self) 
-{
-  EkigaMainWindow *mw = EKIGA_MAIN_WINDOW (self);
-
-  boost::shared_ptr<Ekiga::AudioInputCore> audioinput_core = mw->priv->core->get<Ekiga::AudioInputCore> ("audioinput-core");
-  boost::shared_ptr<Ekiga::AudioOutputCore> audiooutput_core = mw->priv->core->get<Ekiga::AudioOutputCore> ("audiooutput-core");
-
-  gm_level_meter_set_level (GM_LEVEL_METER (mw->priv->output_signal), audiooutput_core->get_average_level());
-  gm_level_meter_set_level (GM_LEVEL_METER (mw->priv->input_signal), audioinput_core->get_average_level());
-  return true;
-}
-
 static void on_established_call_cb (boost::shared_ptr<Ekiga::CallManager>  /*manager*/,
                                     boost::shared_ptr<Ekiga::Call>  call,
                                     gpointer self)
@@ -1101,9 +1083,6 @@ static void on_cleared_call_cb (boost::shared_ptr<Ekiga::CallManager>  /*manager
 
   audiooutput_core->stop_play_event("incoming_call_sound");
   audiooutput_core->stop_play_event("ring_tone_sound");
-
-  ekiga_main_window_clear_signal_levels (mw);
-
 }
 
 
@@ -2131,11 +2110,6 @@ gm_mw_audio_settings_window_new (EkigaMainWindow *mw)
   gtk_scale_set_draw_value (GTK_SCALE (hscale_play), FALSE);
   gtk_box_pack_start (GTK_BOX (small_vbox), hscale_play, TRUE, TRUE, 0);
 
-  mw->priv->output_signal = gm_level_meter_new ();
-  gtk_box_pack_start (GTK_BOX (small_vbox), mw->priv->output_signal, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), small_vbox, TRUE, TRUE, 2);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 3);
-
   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (window)->vbox), 
                      mw->priv->audio_output_volume_frame);
   gtk_widget_show_all (mw->priv->audio_output_volume_frame);
@@ -2164,11 +2138,6 @@ gm_mw_audio_settings_window_new (EkigaMainWindow *mw)
   gtk_scale_set_value_pos (GTK_SCALE (hscale_rec), GTK_POS_RIGHT); 
   gtk_scale_set_draw_value (GTK_SCALE (hscale_rec), FALSE);
   gtk_box_pack_start (GTK_BOX (small_vbox), hscale_rec, TRUE, TRUE, 0);
-
-  mw->priv->input_signal = gm_level_meter_new ();
-  gtk_box_pack_start (GTK_BOX (small_vbox), mw->priv->input_signal, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), small_vbox, TRUE, TRUE, 2);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 3);
 
   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (window)->vbox), 
                      mw->priv->audio_input_volume_frame);
@@ -3019,15 +2988,6 @@ ekiga_main_window_hide_call_panel (EkigaMainWindow *mw)
     x = x - call_panel->allocation.width;
     gtk_window_resize (GTK_WINDOW (mw), x, y);
   }
-}
-
-void
-ekiga_main_window_clear_signal_levels (EkigaMainWindow *mw)
-{
-  g_return_if_fail (EKIGA_IS_MAIN_WINDOW (mw));
-
-  gm_level_meter_clear (GM_LEVEL_METER (mw->priv->output_signal));
-  gm_level_meter_clear (GM_LEVEL_METER (mw->priv->input_signal));
 }
 
 

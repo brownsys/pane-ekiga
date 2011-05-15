@@ -419,7 +419,6 @@ on_extlink_tag_event (GtkTextTag* tag,
   case GDK_SELECTION_CLEAR:
   case GDK_PROXIMITY_IN:
   case GDK_PROXIMITY_OUT:
-  case GDK_NO_EXPOSE:
   case GDK_VISIBILITY_NOTIFY:
   case GDK_CLIENT_EVENT:
   case GDK_DROP_FINISHED:
@@ -555,7 +554,7 @@ message_activated_cb (G_GNUC_UNUSED GtkWidget *w,
 
   g_return_val_if_fail (data != NULL, false);
 
-  if (key->keyval == GDK_Return) {
+  if (key->keyval == GDK_KEY_Return) {
 
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->priv->message));
     gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (buffer), &start_iter);
