@@ -37,7 +37,10 @@ libgmgtk_frontend_la_SOURCES = \
 	$(gtk_frontend_dir)/chat-window.h 		\
 	$(gtk_frontend_dir)/chat-window.cpp 		\
 	$(gtk_frontend_dir)/gtk-frontend.h 		\
-	$(gtk_frontend_dir)/gtk-frontend.cpp
+	$(gtk_frontend_dir)/gtk-frontend.cpp		\
+	$(gtk_frontend_dir)/pane-support.h 		\
+	$(gtk_frontend_dir)/pane-support.cpp
+
 
 libgmgtk_frontend_la_LIBADD = \
 	$(top_builddir)/lib/gui/libgmwidgets.la 			\

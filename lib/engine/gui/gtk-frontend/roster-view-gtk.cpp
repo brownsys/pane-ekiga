@@ -49,7 +49,7 @@
 #include "menu-builder-gtk.h"
 #include "toolbar-builder-gtk.h"
 #include "form-dialog-gtk.h"
-
+#include "pane-support.h"
 
 /* FIXME: this is stupid : I can't seem to be able to use the marshallers
  * defined in lib/ from here!
@@ -496,9 +496,14 @@ on_clicked_fold (RosterViewGtk* self,
 static void
 on_clicked_trigger_presentity (Ekiga::PresentityPtr presentity)
 {
-  Ekiga::TriggerMenuBuilder builder;
+  /* jplace */
+  gint response = reserve_bandwidth();
 
-  presentity->populate_menu (builder);
+  if(response == GTK_RESPONSE_OK)
+  {
+	Ekiga::TriggerMenuBuilder builder;
+	presentity->populate_menu (builder);
+  }
 }
 
 static void
